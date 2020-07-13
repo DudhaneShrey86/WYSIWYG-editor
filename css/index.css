@@ -1,0 +1,11 @@
+#editorframe{
+  width: 100%;
+  outline: 0;
+  border: 1px solid #e6e6e6;
+  cursor: pointer;
+  min-height: 500px;
+}
+.fullimages{
+  width: 100% !important;
+  display: block !important;
+}
