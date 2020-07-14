@@ -10,7 +10,7 @@ function execCmdWithArg(command, arg){
 //   execCmd('insertParagraph');
 // }
 function insertsomething(){
-  var str = '<p class="some"><img src=".././darkback.jpg"></p>';
+  var str = '<p class="some" onclick="removeimage(this);"></p><img src=".././darkback.jpg" />';
   execCmdWithArg('insertHTML', str);
   execCmd('insertParagraph');
 }
@@ -25,13 +25,16 @@ function editmode(){
   editorframe.document.designMode = 'On';
 }
 function appendcss(){
-  var node = editorframe.document.createElement('STYLE');
-  var textnode = `
+  var nodecss = editorframe.document.createElement('STYLE');
+  var textnodecss = `
+  .some{
+    position: relative;
+  }
   .some::before{
     content: '';
     position: absolute;
     right: 10px;
-    top: 20px;
+    top: 10px;
     width: 20px;
     height: 20px;
     background: red;
@@ -43,15 +46,38 @@ function appendcss(){
     margin: 10px 0;
   }
   `;
-  var textnode = document.createTextNode(textnode);
-  node.appendChild(textnode);
-  editorframe.document.getElementsByTagName("head")[0].appendChild(node);
+  var nodejs = editorframe.document.createElement('SCRIPT');
+  var textnodejs = `
+  function removeimage(t){
+    t.nextSibling.remove();
+    t.remove();
+  }
+  `;
+
+  var textnodecss = document.createTextNode(textnodecss);
+  nodecss.appendChild(textnodecss);
+  editorframe.document.getElementsByTagName("head")[0].appendChild(nodecss);
+  var textnodejs = document.createTextNode(textnodejs);
+  nodejs.appendChild(textnodejs);
+  editorframe.document.getElementsByTagName("body")[0].appendChild(nodejs);
 }
 
 function showfocus(event){
   if(event.which == 8){
-    console.log(editorframe.window.getSelection().getRangeAt(0));
+    var parent = editorframe.window.getSelection().getRangeAt(0);
+    if(parent.endContainer.lastChild != null){
+      var lastelement = parent.endContainer.lastElementChild;
+      if(lastelement.nodeName == "IMG"){
+        lastelement.previousSibling.remove();
+      }
+      else{
+        console.log('no');
+      }
+    }
   }
+}
+function removeimage(t){
+  console.log(t);
 }
 
 editmode();
