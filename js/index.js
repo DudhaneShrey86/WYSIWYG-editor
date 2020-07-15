@@ -9,16 +9,15 @@ function execCmdWithArg(command, arg){
 //   execCmdWithArg('insertImage', '.././darkback.jpg');
 //   execCmd('insertParagraph');
 // }
-function insertsomething(){
+function insertimage(){
+  var parent = editorframe.window.getSelection().getRangeAt(0);
+  if(parent.endContainer.nodeName == 'DIV'){
+    parent.endContainer.remove();
+  }
   var str = '<p class="some" onclick="removeimage(this);"></p><img src=".././darkback.jpg" />';
   execCmdWithArg('insertHTML', str);
   execCmd('insertParagraph');
 }
-
-// function insertimage(t){
-//   execCmdWithArg('insertImage', t.value);
-//   t.value = "";
-// }
 
 //////enabling editing mode
 function editmode(){
@@ -59,19 +58,32 @@ function appendcss(){
   editorframe.document.getElementsByTagName("head")[0].appendChild(nodecss);
   var textnodejs = document.createTextNode(textnodejs);
   nodejs.appendChild(textnodejs);
-  editorframe.document.getElementsByTagName("body")[0].appendChild(nodejs);
+  editorframe.document.getElementsByTagName("head")[0].appendChild(nodejs);
 }
 
 function showfocus(event){
   if(event.which == 8){
     var parent = editorframe.window.getSelection().getRangeAt(0);
-    if(parent.endContainer.lastChild != null){
-      var lastelement = parent.endContainer.lastElementChild;
+    if(parent.endContainer.previousElementSibling != null){
+      var lastelement = parent.endContainer.previousElementSibling;
       if(lastelement.nodeName == "IMG"){
+        event.preventDefault();
         lastelement.previousSibling.remove();
+        lastelement.remove();
       }
       else{
-        console.log('no');
+        //////////here
+        // event.preventDefault();
+        var divelement = parent.endContainer.previousElementSibling;
+        if(parent.endContainer.nodeName == 'BODY'){
+
+        }
+        else if(divelement.lastElementChild){
+          if(divelement.lastElementChild.nodeName == "IMG"){
+            event.preventDefault();
+            divelement.remove();
+          }
+        }
       }
     }
   }
@@ -79,6 +91,21 @@ function showfocus(event){
 function removeimage(t){
   console.log(t);
 }
+
+var x = new MutationObserver(function(e){
+  if(e[0].removedNodes[0]){
+    var removedelement = e[0].removedNodes[0];
+    if(removedelement.nodeName == "IMG"){
+      var pelements = editorframe.document.getElementsByClassName('some');
+      for(var p of pelements){
+        if(p.nextSibling.nodeName != "IMG"){
+          p.remove();
+        }
+      }
+    }
+  }
+});
+x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
 
 editmode();
 appendcss();
