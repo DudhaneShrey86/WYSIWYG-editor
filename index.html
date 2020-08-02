@@ -8,7 +8,14 @@
   </head>
   <body>
     <iframe src="" name="editorframe" id="editorframe"></iframe>
-    <button type="button" onclick="insertimage();">Insert</button>
+    <button onclick="insertImage('darkback.jpg');">Insert</button>
+    <button onclick="setPadding(10, 10, 10, 10)">Set Padding</button>
+    <button id="gethtmlbutton">GET HTML</button>
+    <button id="sethtmlbutton">SET HTML</button>
+    <p>For set HTML i have passed dummy string for now</p>
+    <div id="resultdiv">
+
+    </div>
     <script src="index.js" charset="utf-8"></script>
   </body>
 </html>

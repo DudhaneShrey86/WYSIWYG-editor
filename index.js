@@ -1,7 +1,7 @@
 editorframe.document.designMode = "on";
 
-function insertimage(){
-  var str = "<p class='some' onclick='removeimage(this)'></p><img src='darkback.jpg' />";
+function insertImage(imglink){
+  var str = "<p class='some' onclick='removeImage(this)'></p><img src='"+imglink+"' />";
   execCommandWithArg('insertHTML', str);
   execCommand('insertParagraph');
 }
@@ -13,9 +13,12 @@ function execCommandWithArg(command, arg){
   editorframe.document.execCommand(command, false, arg);
 }
 
-function appendcss(){
+function appendCss(){
   var nodecss = editorframe.document.createElement('STYLE');
   var textnodecss = `
+  body{
+    margin: 0;
+  }
   .some{
     position: relative;
   }
@@ -37,7 +40,7 @@ function appendcss(){
   `;
   var nodejs = editorframe.document.createElement('SCRIPT');
   var textnodejs = `
-  function removeimage(t){
+  function removeImage(t){
     t.nextSibling.remove();
     t.remove();
   }
@@ -61,7 +64,7 @@ var x = new MutationObserver(function(e){
         }
       }
     }
-    else if(removedelement.classList.contains('some')){
+    else if(removedelement.classList && removedelement.classList.contains('some')){
       var imgelements = editorframe.document.getElementsByTagName('img');
       for(var img of imgelements){
         if(img.previousElementSibling == null || !img.previousElementSibling.classList.contains('some')){
@@ -72,10 +75,10 @@ var x = new MutationObserver(function(e){
   });
 });
 
-function checkimage(){
+function checkImage(){
   if(event.which == 8){
     var parent = editorframe.window.getSelection().getRangeAt(0);
-    if(parent.endContainer.children){
+    if(parent.endContainer.children && parent.endContainer.children[0]){
       if(parent.endContainer.children[0].classList.contains("some")){
         event.preventDefault();
         parent.endContainer.remove();
@@ -90,7 +93,7 @@ function checkimage(){
       }
       else if(lastelement.nodeName == "DIV"){
         if(lastelement){
-          if(lastelement.children[0].classList.contains("some")){
+          if(lastelement.children[0] && lastelement.children[0].classList.contains("some")){
             event.preventDefault();
             lastelement.remove();
           }
@@ -99,8 +102,26 @@ function checkimage(){
     }
   }
 }
+////////////new functions here///////////////
+function setPadding(top, right, bottom, left){
+  editorframe.document.getElementsByTagName('body')[0].style.padding = top+'px '+right+'px '+bottom+'px '+left+'px';
+}
+
+function getHTML(){
+  var str = String(editorframe.document.getElementsByTagName('body')[0].innerHTML);
+  return str;
+}
+function setHTML(htmlstr){
+  editorframe.document.getElementsByTagName("body")[0].innerHTML = htmlstr;
+}
 
 
 x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
-editorframe.document.addEventListener("keydown", checkimage);
-appendcss();
+editorframe.document.addEventListener("keydown", checkImage);
+document.getElementById("gethtmlbutton").onclick = function(){
+  document.getElementById("resultdiv").innerText = getHTML();
+};
+document.getElementById("sethtmlbutton").onclick = function(){
+  setHTML('this is a sample html string.<div>It will be used in setHTML function for now.</div><div>Will leave a 3 line space below this line</div><div><br></div><div><br></div><div><br></div><div>To check if it worked fine.</div><div>Now an image!</div><p class="some" onclick="removeImage(this)"></p><img src="darkback.jpg"><div>Some dummy text next</div><div>And yet again an image</div><div><p class="some" onclick="removeImage(this)"></p><img src="darkback.jpg"></div><div>This is the end</div>');
+};
+appendCss();
