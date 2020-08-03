@@ -105,7 +105,7 @@ function checkImage(){
 
 ////////////new functions here///////////////
 function setPadding(left, top, right, bottom){
-  editorframe.document.getElementsByTagName('body')[0].style.padding = left+'px '+top+'px '+right+'px '+bottom+'px';
+  editorframe.document.getElementsByTagName('body')[0].style.padding = top+'px '+right+'px '+bottom+'px '+left+'px';
 }
 
 function setTextColor(mode){
