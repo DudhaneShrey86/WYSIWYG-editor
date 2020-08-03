@@ -102,9 +102,18 @@ function checkImage(){
     }
   }
 }
+
 ////////////new functions here///////////////
-function setPadding(top, right, bottom, left){
-  editorframe.document.getElementsByTagName('body')[0].style.padding = top+'px '+right+'px '+bottom+'px '+left+'px';
+function setPadding(left, top, right, bottom){
+  editorframe.document.getElementsByTagName('body')[0].style.padding = left+'px '+top+'px '+right+'px '+bottom+'px';
+}
+
+function setTextColor(mode){
+  if(mode == 0){
+    editorframe.document.getElementsByTagName('body')[0].style.setProperty('color', 'black');
+  }else{
+    editorframe.document.getElementsByTagName('body')[0].style.setProperty('color', 'white');
+  }
 }
 
 function getHTML(){
