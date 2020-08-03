@@ -2,14 +2,14 @@ editorframe.document.designMode = "on";
 
 function insertImage(imglink){
   var str = "<p class='some' onclick='removeImage(this)'></p><img src='"+imglink+"' />";
-  execCommandWithArg('insertHTML', str);
-  execCommand('insertParagraph');
+  execCmdWithArg('insertHTML', str);
+  execCmd('insertParagraph');
 }
 
-function execCommand(command){
+function execCmd(command){
   editorframe.document.execCommand(command, false, null);
 }
-function execCommandWithArg(command, arg){
+function execCmdWithArg(command, arg){
   editorframe.document.execCommand(command, false, arg);
 }
 
