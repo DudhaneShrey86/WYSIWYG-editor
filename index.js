@@ -124,6 +124,45 @@ function setHTML(htmlstr){
   editorframe.document.getElementsByTagName("body")[0].innerHTML = htmlstr;
 }
 
+function setBold(){
+  execCmd('bold');
+}
+
+function setItalic(){
+  execCmd('italic');
+}
+
+function setUnderline(){
+  execCmd('underline');
+}
+
+function setAlignLeft(){
+  execCmd('justifyLeft');
+}
+
+function setAlignRight(){
+  execCmd('justifyRight');
+}
+
+function setAlignCenter(){
+  execCmd('justifyCenter');
+}
+
+function setUnorderedList(){
+  execCmd('insertUnorderedList');
+}
+
+function setOrderedList(){
+  execCmd('insertOrderedList');
+}
+
+function undo(){
+//  execCmd('underline');
+}
+
+function redo(){
+//  execCmd('underline');
+}
 
 x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
 editorframe.document.addEventListener("keydown", checkImage);
