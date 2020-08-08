@@ -1,12 +1,17 @@
 body{
   margin: 0;
 }
+h1, h2, h3, h4, h5, h6{
+  font-weight: normal;
+  margin: 0;
+}
 #editorframe{
   border: 1px solid #e6e6e6;
   outline: 0;
   width: 100vw;
   box-sizing: border-box;
   height: 80vh;
+  
 }
 .image{
   display: block;

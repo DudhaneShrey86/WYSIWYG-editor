@@ -1,5 +1,8 @@
 editorframe.document.designMode = "on";
 
+var editorbody = editorframe.document.getElementsByTagName("body")[0];
+var editorhead = editorframe.document.getElementsByTagName("head")[0];
+
 function insertImage(imglink){
   var str = "<p class='some' onclick='removeImage(this)'></p><img src='"+imglink+"' />";
   execCmdWithArg('insertHTML', str);
@@ -19,6 +22,12 @@ function appendCss(){
   body{
     margin: 0;
   }
+  body.blank::after{
+    content: 'Enter note here';
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+  }
   .some{
     position: relative;
   }
@@ -29,13 +38,18 @@ function appendCss(){
     top: 10px;
     width: 20px;
     height: 20px;
-    background: red;
+    background-image: url('close.png');
+    background-size: contain;
     z-index: 10;
   }
   img{
     display: block;
     width: 100%;
     margin: 10px 0;
+    max-height: 250px;
+  }
+  h3{
+    margin: 5px auto;
   }
   `;
   var nodejs = editorframe.document.createElement('SCRIPT');
@@ -47,13 +61,20 @@ function appendCss(){
   `;
   var textnodecss = document.createTextNode(textnodecss);
   nodecss.appendChild(textnodecss);
-  editorframe.document.getElementsByTagName("head")[0].appendChild(nodecss);
+  editorhead.appendChild(nodecss);
   var textnodejs = document.createTextNode(textnodejs);
   nodejs.appendChild(textnodejs);
-  editorframe.document.getElementsByTagName("head")[0].appendChild(nodejs);
+  editorhead.appendChild(nodejs);
+  editorbody.classList.add("blank");
 }
 
 var x = new MutationObserver(function(e){
+  if(editorbody.innerHTML == ""){
+    editorbody.classList.add("blank");
+  }
+  else{
+    editorbody.classList.remove("blank");
+  }
   var removedelements = e[0].removedNodes;
   removedelements.forEach((removedelement, i) => {
     if(removedelement.nodeName == "IMG"){
@@ -105,23 +126,23 @@ function checkImage(){
 
 ////////////new functions here///////////////
 function setPadding(left, top, right, bottom){
-  editorframe.document.getElementsByTagName('body')[0].style.padding = top+'px '+right+'px '+bottom+'px '+left+'px';
+  editorbody.style.padding = top+'px '+right+'px '+bottom+'px '+left+'px';
 }
 
 function setTextColor(mode){
   if(mode == 0){
-    editorframe.document.getElementsByTagName('body')[0].style.setProperty('color', 'black');
+    editorbody.style.setProperty('color', 'black');
   }else{
-    editorframe.document.getElementsByTagName('body')[0].style.setProperty('color', 'white');
+    editorbody.style.setProperty('color', 'white');
   }
 }
 
 function getHTML(){
-  var str = String(editorframe.document.getElementsByTagName('body')[0].innerHTML);
+  var str = String(editorbody.innerHTML);
   return str;
 }
 function setHTML(htmlstr){
-  editorframe.document.getElementsByTagName("body")[0].innerHTML = htmlstr;
+  editorbody.innerHTML = htmlstr;
 }
 
 function setBold(){
@@ -157,11 +178,11 @@ function setOrderedList(){
 }
 
 function undo(){
-//  execCmd('underline');
+ execCmd('undo');
 }
 
 function redo(){
-//  execCmd('underline');
+ execCmd('redo');
 }
 
 x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
@@ -170,6 +191,6 @@ document.getElementById("gethtmlbutton").onclick = function(){
   document.getElementById("resultdiv").innerText = getHTML();
 };
 document.getElementById("sethtmlbutton").onclick = function(){
-  setHTML('this is a sample html string.<div>It will be used in setHTML function for now.</div><div>Will leave a 3 line space below this line</div><div><br></div><div><br></div><div><br></div><div>To check if it worked fine.</div><div>Now an image!</div><p class="some" onclick="removeImage(this)"></p><img src="darkback.jpg"><div>Some dummy text next</div><div>And yet again an image</div><div><p class="some" onclick="removeImage(this)"></p><img src="darkback.jpg"></div><div>This is the end</div>');
+  setHTML('<h3>this is a header h3</h3><div>Now this is a normal paragraph, nothing else</div><div>Heres an image</div><p class="some" onclick="removeImage(this)"></p><img src="darkback.jpg"><div><br></div>');
 };
 appendCss();
