@@ -46,7 +46,9 @@ function appendCss(){
     display: block;
     width: 100%;
     margin: 10px 0;
-    max-height: 250px;
+    max-height: 230px;
+    object-fit: cover;
+    object-position: center;
   }
   h3{
     margin: 5px auto;
@@ -96,7 +98,7 @@ var x = new MutationObserver(function(e){
   });
 });
 
-function checkImage(){
+function checkForImage(){
   if(event.which == 8){
     var parent = editorframe.window.getSelection().getRangeAt(0);
     if(parent.endContainer.children && parent.endContainer.children[0]){
@@ -186,7 +188,7 @@ function redo(){
 }
 
 x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
-editorframe.document.addEventListener("keydown", checkImage);
+editorframe.document.addEventListener("keydown", checkForImage);
 document.getElementById("gethtmlbutton").onclick = function(){
   document.getElementById("resultdiv").innerText = getHTML();
 };
