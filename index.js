@@ -25,6 +25,7 @@ function appendCss(){
   body.blank::after{
     content: 'Enter note here';
     z-index: 1;
+    color: #808080;
     width: 100%;
     height: 100%;
   }
@@ -179,20 +180,18 @@ function setOrderedList(){
   execCmd('insertOrderedList');
 }
 
+function setTextSize(){
+  execCmdWithArg('formatBlock', 'H3');
+}
+
 function undo(){
- execCmd('undo');
+  execCmd('undo');
 }
 
 function redo(){
- execCmd('redo');
+  execCmd('redo');
 }
 
 x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
 editorframe.document.addEventListener("keydown", checkForImage);
-document.getElementById("gethtmlbutton").onclick = function(){
-  document.getElementById("resultdiv").innerText = getHTML();
-};
-document.getElementById("sethtmlbutton").onclick = function(){
-  setHTML('<h3>this is a header h3</h3><div>Now this is a normal paragraph, nothing else</div><div>Heres an image</div><p class="some" onclick="removeImage(this)"></p><img src="darkback.jpg"><div><br></div>');
-};
 appendCss();
