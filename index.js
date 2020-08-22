@@ -2,6 +2,8 @@ editorframe.document.designMode = "on";
 
 var editorbody = editorframe.document.getElementsByTagName("body")[0];
 var editorhead = editorframe.document.getElementsByTagName("head")[0];
+var undoflag;
+var redoflag;
 
 function insertImage(imglink){
   var str = "<p class='some' onclick='removeImage(this)'></p><img src='"+imglink+"' />";
@@ -11,9 +13,11 @@ function insertImage(imglink){
 
 function execCmd(command){
   editorframe.document.execCommand(command, false, null);
+  checkButtons();
 }
 function execCmdWithArg(command, arg){
   editorframe.document.execCommand(command, false, arg);
+  checkButtons();
 }
 
 function appendCss(){
@@ -125,6 +129,7 @@ function checkForImage(){
       }
     }
   }
+  checkButtons();
 }
 
 ////////////new functions here///////////////
@@ -192,6 +197,20 @@ function redo(){
   execCmd('redo');
 }
 
+function checkButtons(){
+  undoflag = false;
+  redoflag = false;
+  if(editorframe.document.queryCommandEnabled("undo")){
+    undoflag = true;
+  }
+  if(editorframe.document.queryCommandEnabled("redo")){
+    redoflag = true;
+  }
+  // calls your java function here
+  JSAction.checkButtons(undoflag, redoflag);
+}
+
 x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
 editorframe.document.addEventListener("keydown", checkForImage);
 appendCss();
+checkButtons();
