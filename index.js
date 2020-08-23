@@ -6,7 +6,7 @@ var undoflag;
 var redoflag;
 
 function insertImage(imglink){
-  var str = "<p class='some' onclick='removeImage(this)'></p><img src='"+imglink+"' />";
+  var str = "<p class='some'></p><img src='"+imglink+"' />";
   execCmdWithArg('insertHTML', str);
   execCmd('insertParagraph');
 }
@@ -65,6 +65,11 @@ function appendCss(){
     t.nextSibling.remove();
     t.remove();
   }
+  document.addEventListener("click", function(event){
+    if(event.target && event.target.className == "some"){
+      removeImage(event.target);
+    }
+  });
   `;
   var textnodecss = document.createTextNode(textnodecss);
   nodecss.appendChild(textnodecss);
@@ -207,7 +212,7 @@ function checkButtons(){
     redoflag = true;
   }
   // calls your java function here
-  JSAction.checkButtons(undoflag, redoflag);
+  // JSAction.checkButtons(undoflag, redoflag);
 }
 
 x.observe(editorframe.document.getElementsByTagName('body')[0], {childList: true});
